@@ -126,6 +126,9 @@
     <Compile Include="DIO.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Error.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="interrupt.h">
       <SubType>compile</SubType>
     </Compile>

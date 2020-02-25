@@ -60,55 +60,63 @@ Timer_cfg_s gstr_Timer_Cfg;
 ERROR_STATUS TMU_Init(void)
 {
 		
+/*
 		ERROR_STATUS u8_status = E_OK;
+*/
+		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
 		
-		uint8_t u8_counter;
-	
-	        for(u8_counter = 0; u8_counter < MAX_TASK_COUNT; u8_counter++)
-	        {
-	        	gastrTMU_Buff[u8_counter].gptrTMU_Function = NULL;
-	        	gastrTMU_Buff[u8_counter].u16_Delay = 0;
-	        	gastrTMU_Buff[u8_counter].u8_Periodicity = 0;
-	        }
+		if (gsu8_TMUInitStatus == INITIALIZED)
+		{
+			u8_status = TMU_ERROR_BASE + ERROR_ALREADY_INITIALIZED;
+		}
+		else{
+			
+			uint8_t u8_counter;
+			
+			for(u8_counter = 0; u8_counter < MAX_TASK_COUNT; u8_counter++)
+			{
+				gastrTMU_Buff[u8_counter].gptrTMU_Function = NULL;
+				gastrTMU_Buff[u8_counter].u16_Delay = 0;
+				gastrTMU_Buff[u8_counter].u8_Periodicity = 0;
+			}
 
 
-	/* switch on timer channel */
-	
-	#if TMU_TIMER_CH0
-	
-	gstr_Timer_Cfg.Timer_CH_NO = TIMER_CH0;
-	gstr_Timer_Cfg.Timer_Prescaler = TIMER_PRESCALER_64; /* preload = 256 - 250 */
-	gu16_PRELOAD = 256 - 250;
-	
-	#elif TMU_TIMER_CH1
-	
-	gstr_Timer_Cfg.Timer_CH_NO = TIMER_CH1;
-	gstr_Timer_Cfg.Timer_Prescaler = TIMER_PRESCALER_1024; /* preload = 65536 - 156 */
-	gu16_PRELOAD = 65536 - 15;
-	
-	#elif TMU_TIMER_CH2
-	
-	gstr_Timer_Cfg.Timer_CH_NO = TIMER_CH2;
-	gstr_Timer_Cfg.Timer_Prescaler = TIMER_PRESCALER_1024; /* preload = 65536 - 156 */
-	gu16_PRELOAD = 256 - 15;
-	
-	#endif
-	
-	
-	gstr_Timer_Cfg.Timer_Mode = TIMER_MODE;
-	gstr_Timer_Cfg.Timer_Polling_Or_Interrupt = TIMER_INTERRUPT_MODE;
-	gstr_Timer_Cfg.Timer_Cbk_Fun = TMU_TimerOvf_CBK;
-	
-	/* Initializing the  timer */
-	
-	u8_status = Timer_Init(&gstr_Timer_Cfg);
-
-	/* set TMU module is initialized */
-	
-	gsu8_TMUInitStatus = INITIALIZED;
-
-
-
+			/* switch on timer channel */
+			
+			#if TMU_TIMER_CH0
+			
+			gstr_Timer_Cfg.Timer_CH_NO = TIMER_CH0;
+			gstr_Timer_Cfg.Timer_Prescaler = TIMER_PRESCALER_64; /* preload = 256 - 250 */
+			gu16_PRELOAD = 256 - 250;
+			
+			#elif TMU_TIMER_CH1
+			
+			gstr_Timer_Cfg.Timer_CH_NO = TIMER_CH1;
+			gstr_Timer_Cfg.Timer_Prescaler = TIMER_PRESCALER_1024; /* preload = 65536 - 156 */
+			gu16_PRELOAD = 65536 - 15;
+			
+			#elif TMU_TIMER_CH2
+			
+			gstr_Timer_Cfg.Timer_CH_NO = TIMER_CH2;
+			gstr_Timer_Cfg.Timer_Prescaler = TIMER_PRESCALER_1024; /* preload = 65536 - 156 */
+			gu16_PRELOAD = 256 - 15;
+			
+			#endif
+			
+			
+			gstr_Timer_Cfg.Timer_Mode = TIMER_MODE;
+			gstr_Timer_Cfg.Timer_Polling_Or_Interrupt = TIMER_INTERRUPT_MODE;
+			gstr_Timer_Cfg.Timer_Cbk_Fun = TMU_TimerOvf_CBK;
+			
+			/* Initializing the  timer */
+			
+			u8_status = Timer_Init(&gstr_Timer_Cfg);
+					
+			/* set TMU module is initialized */
+			
+			gsu8_TMUInitStatus = INITIALIZED;
+		}
+		
 	return u8_status;
 }
 
@@ -122,20 +130,32 @@ ERROR_STATUS TMU_Init(void)
 */
 ERROR_STATUS TMU_DeInit(void)
 {	
-		ERROR_STATUS u8_status =  E_OK;
 		
-	/* empty the buffer */
-	    uint8_t u8_counter;
-	        for(u8_counter = 0; u8_counter < MAX_TASK_COUNT; u8_counter++)
-	        {
-		        gastrTMU_Buff[u8_counter].gptrTMU_Function = NULL;
-		        gastrTMU_Buff[u8_counter].u16_Delay = 0;
-		        gastrTMU_Buff[u8_counter].u16_MilliSecond_Count = 0;
-		        gastrTMU_Buff[u8_counter].u8_Periodicity = 0;
-	       }
+		/*
+		ERROR_STATUS u8_status = E_OK;
+*/
+		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
+		
+		if (gsu8_TMUInitStatus == NOT_INITIALIZED)
+		{
+			u8_status = TMU_ERROR_BASE + ERROR_NOT_INITIALIZED;
+		}
+		else
+		{
+			/* empty the buffer */
+			uint8_t u8_counter;
+			for(u8_counter = 0; u8_counter < MAX_TASK_COUNT; u8_counter++)
+			{
+				gastrTMU_Buff[u8_counter].gptrTMU_Function = NULL;
+				gastrTMU_Buff[u8_counter].u16_Delay = 0;
+				gastrTMU_Buff[u8_counter].u16_MilliSecond_Count = 0;
+				gastrTMU_Buff[u8_counter].u8_Periodicity = 0;
+			}
 
-	/*  TMU module is not initialized */
-	gsu8_TMUInitStatus = NOT_INITIALIZED;
+			/*  TMU module is not initialized */
+			gsu8_TMUInitStatus = NOT_INITIALIZED;
+			
+		}
 	
 	return u8_status;
 }
@@ -152,17 +172,21 @@ ERROR_STATUS TMU_Start(gptrTMU_Function_t gptrTMU_Function,
 					   uint8_t u8_Periodicity)
 {
 	
-	ERROR_STATUS u8_status = E_OK;
-	
+	/*
+		ERROR_STATUS u8_status = E_OK;
+*/
+		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
+		
+		
 	if(gsu8_TMUInitStatus == NOT_INITIALIZED)
 	{
-		u8_status = E_NOK;
+		u8_status = TMU_ERROR_BASE + ERROR_NOT_INITIALIZED;
 	}
 	else
 	{
 		if(NULL == gptrTMU_Function)
 		{
-			u8_status = E_NOK;
+			u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
 		}
 		else
 		{
@@ -190,8 +214,7 @@ ERROR_STATUS TMU_Start(gptrTMU_Function_t gptrTMU_Function,
 			gu8_Index++;
 		} /* end of else */
 	} /* end of outer else */
-	
-	
+
 	return u8_status;
 }
 
@@ -200,13 +223,18 @@ ERROR_STATUS TMU_Start(gptrTMU_Function_t gptrTMU_Function,
 * @param: gptrTMU_Function: pointer to callback function
 * @return: ERROR_STATUS status code with error code if one occurred
 */
+ 
 ERROR_STATUS TMU_Stop(gptrTMU_Function_t gptrTMU_Function)
 {
-	ERROR_STATUS u8_status = E_OK;
+		/*
+		ERROR_STATUS u8_status = E_OK;
+*/
+		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
+		
 
 	if(gsu8_TMUInitStatus == NOT_INITIALIZED)
 	{
-		u8_status = E_NOK;
+		u8_status = TMU_ERROR_BASE + ERROR_NOT_INITIALIZED;
 	}
 	else
 	{
@@ -214,7 +242,7 @@ ERROR_STATUS TMU_Stop(gptrTMU_Function_t gptrTMU_Function)
 
 		if(gu8_Index == 0)
 		{
-			u8_status = E_NOK;
+			u8_status = TMU_ERROR_BASE + ERROR_EMPTY_BUFFER;
 		}
 		else
 		{
@@ -265,8 +293,12 @@ ERROR_STATUS TMU_Stop(gptrTMU_Function_t gptrTMU_Function)
 */
 ERROR_STATUS TMU_Dispatcher(void)
 {
-	ERROR_STATUS u8_status = E_OK;
-	
+		/*
+		ERROR_STATUS u8_status = E_OK;
+*/
+		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
+		
+
 	if(gu8_TMU_TimerOvf_Flag == OVF_TRIGGERED)
 	{
 		uint8_t u8_Counter;
@@ -276,6 +308,8 @@ ERROR_STATUS TMU_Dispatcher(void)
 			if(NULL == gastrTMU_Buff[u8_Counter].gptrTMU_Function)
 			{
 				/* skip for now until making circular buffer */
+				u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
+
 			}
 			else
 			{
@@ -291,6 +325,8 @@ ERROR_STATUS TMU_Dispatcher(void)
 			if(NULL == gastrTMU_Buff[u8_Counter].gptrTMU_Function)
 			{
 				/* skip for now until making circular buffer */
+				u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
+
 			}
 			else
 			{
@@ -313,7 +349,7 @@ ERROR_STATUS TMU_Dispatcher(void)
 	
 	else
 	{
-		u8_status = E_NOK;
+		/*u8_status = E_NOK;*/
 	}
 	return u8_status;
 }

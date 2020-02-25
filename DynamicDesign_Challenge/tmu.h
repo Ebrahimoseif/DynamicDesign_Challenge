@@ -16,6 +16,7 @@
 #include "std_types.h"
 #include "tmu_cfg.h"
 #include "Timer.h"
+#include "Error.h"
 
 
 /************************************************************************/

@@ -39,43 +39,47 @@ void led2_toggle(void){
 int main(void)
 {
 	
-	
-       /*struct Timer_cfg_s st_Timer_cfg={
-       	TIMER_CH0,
-       	TIMER_MODE,
-       	TIMER_INTERRUPT_MODE,
-       	TIMER_PRESCALER_1024
-       };*/
-
-	/*PORTA_DIR = 0xff;
-	PORTC_DIR = 0xff;
-	PORTD_DIR = 0xff;*/
-	
 	DIO_Cfg_s Leds ={
 		GPIOB,
 		BIT5 |BIT6 |BIT7,
 		OUTPUT
 	};
+	
 	DIO_init(&Leds);
 	
 	TMU_Init();
-	//Timer_Init(&st_Timer_cfg);
+	
 	TMU_Start(led0_toggle, 1000, PERIODIC);
 	TMU_Start(led1_toggle, 500, ONE_SHOT);
 	TMU_Start(led2_toggle, 2000, PERIODIC);
 
-
 	sei();
 
-
-	//Timer_Start(0,100);
-	
     /* Replace with your application code */
     while (1) 
     {
 				//fun();
 		   TMU_Dispatcher();
     }
+	
+	
+	
+	      /* testing timers
+	   struct Timer_cfg_s st_Timer_cfg={
+       	TIMER_CH0,
+       	TIMER_MODE,
+       	TIMER_INTERRUPT_MODE,
+       	TIMER_PRESCALER_1024
+       };
+	Timer_Init(&st_Timer_cfg);
+	Timer_Start(0,100);
+	*/
+	/*PORTA_DIR = 0xff;
+	PORTC_DIR = 0xff;
+	PORTD_DIR = 0xff;*/
+	
+	
+	
 }
 
 
