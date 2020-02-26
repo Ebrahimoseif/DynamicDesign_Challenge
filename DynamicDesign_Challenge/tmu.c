@@ -252,25 +252,33 @@ ERROR_STATUS TMU_Stop(gptrTMU_Function_t gptrTMU_Function)
 		}
 		else
 		{
-			for(u8_Counter = 0; u8_Counter < MAX_TASK_COUNT; u8_Counter++)
+			if (NULL == gptrTMU_Function)
 			{
-				if(gastrTMU_Buff[u8_Counter].gptrTMU_Function == gptrTMU_Function)
+			u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
+			}
+			else
+			{
+			
+			for(u8_Counter = 0; u8_Counter < MAX_TASK_COUNT; u8_Counter++)
 				{
+					if(gastrTMU_Buff[u8_Counter].gptrTMU_Function == gptrTMU_Function)
+					{
 					/* Check if one task exist or full */
 					if((gu8_Index == 1) || (gu8_Index == MAX_TASK_COUNT))
-					{
+						{
 						TMU_ClearTask(gu8_Index);
 						gu8_Index--;
-					}
-					else
-					{
+						}
+						else
+						{
 						TMU_ShiftTasks(u8_Counter , (gu8_Index-1));
 
 						TMU_ClearTask((gu8_Index-1));
 						gu8_Index--;
-					}
-				}
-			}
+						}
+				   }
+			  }
+		  }
 		}
 
 		/*  if buffer is empty so stop the timer */

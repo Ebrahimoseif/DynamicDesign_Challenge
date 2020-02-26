@@ -94,6 +94,7 @@ int main(void)
 	{
 		//fun();
 		TMU_Dispatcher();
+		
 	}*/
 	
 	
@@ -155,6 +156,34 @@ int main(void)
 				//fun();
 		   TMU_Dispatcher();
     }*/
+	
+	/*	test case 5 
+	
+	DIO_Cfg_s Leds ={
+		GPIOB,
+		BIT5 |BIT6 |BIT7,
+		OUTPUT
+	};
+	
+	DIO_init(&Leds);
+	
+	TMU_Init();
+	
+	TMU_Start(led0_toggle, 1000, PERIODIC);
+	TMU_Start(led1_toggle, 500, ONE_SHOT);
+	TMU_Start(led2_toggle, 2000, PERIODIC);
+
+	sei();
+
+    / * Replace with your application code * /
+    while (1) 
+    {
+				//fun();
+		   TMU_Dispatcher();
+		   PORTC_DIR = 0xff;
+		   PORTC_DATA = TMU_Stop(NULL) + 4;
+    }*/
+	
 	
 	
 	      /* testing timers
