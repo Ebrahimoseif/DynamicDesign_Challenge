@@ -10,7 +10,17 @@
 #define TMU_CFG_H_
 
 
+
 #define		MAX_TASK_COUNT		(10)
+
+
+/* test case 1
+#define		MAX_TASK_COUNT		(2)
+
+*/
+
+
+
 
 /* TMU Channels */
 

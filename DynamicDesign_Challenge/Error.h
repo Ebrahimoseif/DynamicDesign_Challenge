@@ -22,6 +22,9 @@
 
 #define   ERROR_EMPTY_BUFFER                 (-4)
 
+#define   ERROR_FULL_BUFFER                  (-5)
+
+
 
 
 #endif /* ERROR_H_ */

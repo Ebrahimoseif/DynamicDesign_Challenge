@@ -3,31 +3,31 @@ DynamicDesign_Challenge.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         0000084e  00000000  00000000  00000074  2**1
+  0 .text         00000856  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000000  00800060  00800060  000008c2  2**0
+  1 .data         00000000  00800060  00800060  000008ca  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          0000005c  00800060  00800060  000008c2  2**0
+  2 .bss          0000005c  00800060  00800060  000008ca  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000008c2  2**0
+  3 .comment      00000030  00000000  00000000  000008ca  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000008f4  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000008fc  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000100  00000000  00000000  00000930  2**0
+  5 .debug_aranges 00000100  00000000  00000000  00000938  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000011ae  00000000  00000000  00000a30  2**0
+  6 .debug_info   000011ae  00000000  00000000  00000a38  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000009dd  00000000  00000000  00001bde  2**0
+  7 .debug_abbrev 000009dd  00000000  00000000  00001be6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000d05  00000000  00000000  000025bb  2**0
+  8 .debug_line   00000d11  00000000  00000000  000025c3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000234  00000000  00000000  000032c0  2**2
+  9 .debug_frame  00000234  00000000  00000000  000032d4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000064a  00000000  00000000  000034f4  2**0
+ 10 .debug_str    0000064a  00000000  00000000  00003508  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000e08  00000000  00000000  00003b3e  2**0
+ 11 .debug_loc    00000e08  00000000  00000000  00003b52  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000f0  00000000  00000000  00004946  2**0
+ 12 .debug_ranges 000000f0  00000000  00000000  0000495a  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -75,7 +75,7 @@ Disassembly of section .text:
   70:	10 e0       	ldi	r17, 0x00	; 0
   72:	a0 e6       	ldi	r26, 0x60	; 96
   74:	b0 e0       	ldi	r27, 0x00	; 0
-  76:	ee e4       	ldi	r30, 0x4E	; 78
+  76:	e6 e5       	ldi	r30, 0x56	; 86
   78:	f8 e0       	ldi	r31, 0x08	; 8
   7a:	02 c0       	rjmp	.+4      	; 0x80 <__do_copy_data+0x10>
   7c:	05 90       	lpm	r0, Z+
@@ -98,7 +98,7 @@ Disassembly of section .text:
   92:	b2 07       	cpc	r27, r18
   94:	e1 f7       	brne	.-8      	; 0x8e <.do_clear_bss_loop>
   96:	0e 94 e0 00 	call	0x1c0	; 0x1c0 <main>
-  9a:	0c 94 25 04 	jmp	0x84a	; 0x84a <_exit>
+  9a:	0c 94 29 04 	jmp	0x852	; 0x852 <_exit>
 
 0000009e <__bad_interrupt>:
   9e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -372,13 +372,15 @@ void led2_toggle(void){
 
 
 int main(void)
-{
+{	
  1c0:	cf 93       	push	r28
  1c2:	df 93       	push	r29
  1c4:	00 d0       	rcall	.+0      	; 0x1c6 <main+0x6>
  1c6:	1f 92       	push	r1
  1c8:	cd b7       	in	r28, 0x3d	; 61
  1ca:	de b7       	in	r29, 0x3e	; 62
+	
+	/* normal way */
 	
 	DIO_Cfg_s Leds ={
  1cc:	81 e0       	ldi	r24, 0x01	; 1
@@ -425,12 +427,12 @@ int main(void)
 	sei();
  20e:	78 94       	sei
 
-    /* Replace with your application code */
-    while (1) 
-    {
-				//fun();
-		   TMU_Dispatcher();
- 210:	0e 94 94 03 	call	0x728	; 0x728 <TMU_Dispatcher>
+	
+	while (1)
+	{
+		//fun();
+		TMU_Dispatcher();
+ 210:	0e 94 98 03 	call	0x730	; 0x730 <TMU_Dispatcher>
  214:	fd cf       	rjmp	.-6      	; 0x210 <main+0x50>
 
 00000216 <Timer_Init>:
@@ -700,7 +702,7 @@ int main(void)
  43c:	fc 01       	movw	r30, r24
  43e:	e6 5d       	subi	r30, 0xD6	; 214
  440:	ff 4f       	sbci	r31, 0xFF	; 255
- 442:	0c 94 1f 04 	jmp	0x83e	; 0x83e <__tablejump2__>
+ 442:	0c 94 23 04 	jmp	0x846	; 0x846 <__tablejump2__>
  446:	85 b5       	in	r24, 0x25	; 37
  448:	85 bd       	out	0x25, r24	; 37
  44a:	81 e0       	ldi	r24, 0x01	; 1
@@ -930,7 +932,7 @@ ERROR_STATUS TMU_Start(gptrTMU_Function_t gptrTMU_Function,
 	if(gsu8_TMUInitStatus == NOT_INITIALIZED)
  5ea:	90 91 6c 00 	lds	r25, 0x006C	; 0x80006c <gsu8_TMUInitStatus>
  5ee:	99 23       	and	r25, r25
- 5f0:	09 f1       	breq	.+66     	; 0x634 <TMU_Start+0x4c>
+ 5f0:	19 f1       	breq	.+70     	; 0x638 <TMU_Start+0x50>
 	{
 		u8_status = TMU_ERROR_BASE + ERROR_NOT_INITIALIZED;
 	}
@@ -939,564 +941,580 @@ ERROR_STATUS TMU_Start(gptrTMU_Function_t gptrTMU_Function,
 		if(NULL == gptrTMU_Function)
  5f2:	21 15       	cp	r18, r1
  5f4:	31 05       	cpc	r19, r1
- 5f6:	01 f1       	breq	.+64     	; 0x638 <TMU_Start+0x50>
+ 5f6:	11 f1       	breq	.+68     	; 0x63c <TMU_Start+0x54>
+		{
 			u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
 		}
 		else
 		{
+			if (gu8_Index == MAX_TASK_COUNT)
+ 5f8:	80 91 69 00 	lds	r24, 0x0069	; 0x800069 <gu8_Index>
+ 5fc:	8a 30       	cpi	r24, 0x0A	; 10
+ 5fe:	01 f1       	breq	.+64     	; 0x640 <TMU_Start+0x58>
+			{
+				u8_status = TMU_ERROR_BASE + ERROR_FULL_BUFFER;
+			}
+			else{
 			/* add the task to the buffer */
 			gastrTMU_Buff[gu8_Index].gptrTMU_Function		= gptrTMU_Function;
- 5f8:	80 91 69 00 	lds	r24, 0x0069	; 0x800069 <gu8_Index>
- 5fc:	97 e0       	ldi	r25, 0x07	; 7
- 5fe:	89 9f       	mul	r24, r25
- 600:	f0 01       	movw	r30, r0
- 602:	11 24       	eor	r1, r1
- 604:	e1 59       	subi	r30, 0x91	; 145
- 606:	ff 4f       	sbci	r31, 0xFF	; 255
- 608:	31 83       	std	Z+1, r19	; 0x01
- 60a:	20 83       	st	Z, r18
+ 600:	97 e0       	ldi	r25, 0x07	; 7
+ 602:	89 9f       	mul	r24, r25
+ 604:	f0 01       	movw	r30, r0
+ 606:	11 24       	eor	r1, r1
+ 608:	e1 59       	subi	r30, 0x91	; 145
+ 60a:	ff 4f       	sbci	r31, 0xFF	; 255
+ 60c:	31 83       	std	Z+1, r19	; 0x01
+ 60e:	20 83       	st	Z, r18
 			gastrTMU_Buff[gu8_Index].u16_Delay				= u16_Delay;
- 60c:	73 83       	std	Z+3, r23	; 0x03
- 60e:	62 83       	std	Z+2, r22	; 0x02
+ 610:	73 83       	std	Z+3, r23	; 0x03
+ 612:	62 83       	std	Z+2, r22	; 0x02
 			gastrTMU_Buff[gu8_Index].u16_MilliSecond_Count  = 0;
- 610:	15 82       	std	Z+5, r1	; 0x05
- 612:	14 82       	std	Z+4, r1	; 0x04
+ 614:	15 82       	std	Z+5, r1	; 0x05
+ 616:	14 82       	std	Z+4, r1	; 0x04
 			gastrTMU_Buff[gu8_Index].u8_Periodicity         = u8_Periodicity;
- 614:	46 83       	std	Z+6, r20	; 0x06
+ 618:	46 83       	std	Z+6, r20	; 0x06
 
 			/*start the timer for the first time */
 			
 			if(gu8_Index == 0)
- 616:	81 11       	cpse	r24, r1
- 618:	06 c0       	rjmp	.+12     	; 0x626 <TMU_Start+0x3e>
+ 61a:	81 11       	cpse	r24, r1
+ 61c:	06 c0       	rjmp	.+12     	; 0x62a <TMU_Start+0x42>
 			{
 				#if  TMU_TIMER_CH0
 								
 				Timer_Start(TIMER_CH0, gu16_PRELOAD);
- 61a:	60 91 6d 00 	lds	r22, 0x006D	; 0x80006d <gu16_PRELOAD>
- 61e:	70 91 6e 00 	lds	r23, 0x006E	; 0x80006e <gu16_PRELOAD+0x1>
- 622:	0e 94 9f 01 	call	0x33e	; 0x33e <Timer_Start>
+ 61e:	60 91 6d 00 	lds	r22, 0x006D	; 0x80006d <gu16_PRELOAD>
+ 622:	70 91 6e 00 	lds	r23, 0x006E	; 0x80006e <gu16_PRELOAD+0x1>
+ 626:	0e 94 9f 01 	call	0x33e	; 0x33e <Timer_Start>
 				#elif  TMU_TIMER_CH2
 				Timer_Start(TIMER_CH2, gu16_PRELOAD);
 				#endif
 			}
 
 			gu8_Index++;
- 626:	80 91 69 00 	lds	r24, 0x0069	; 0x800069 <gu8_Index>
- 62a:	8f 5f       	subi	r24, 0xFF	; 255
- 62c:	80 93 69 00 	sts	0x0069, r24	; 0x800069 <gu8_Index>
+ 62a:	80 91 69 00 	lds	r24, 0x0069	; 0x800069 <gu8_Index>
+ 62e:	8f 5f       	subi	r24, 0xFF	; 255
+ 630:	80 93 69 00 	sts	0x0069, r24	; 0x800069 <gu8_Index>
 {
 	
 	/*
 		ERROR_STATUS u8_status = E_OK;
 */
 		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
- 630:	80 e0       	ldi	r24, 0x00	; 0
- 632:	08 95       	ret
+ 634:	80 e0       	ldi	r24, 0x00	; 0
+ 636:	08 95       	ret
 		
 		
 	if(gsu8_TMUInitStatus == NOT_INITIALIZED)
 	{
 		u8_status = TMU_ERROR_BASE + ERROR_NOT_INITIALIZED;
- 634:	8f ef       	ldi	r24, 0xFF	; 255
- 636:	08 95       	ret
+ 638:	8f ef       	ldi	r24, 0xFF	; 255
+ 63a:	08 95       	ret
 	}
 	else
 	{
 		if(NULL == gptrTMU_Function)
 		{
 			u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
- 638:	8d ef       	ldi	r24, 0xFD	; 253
-			gu8_Index++;
+ 63c:	8d ef       	ldi	r24, 0xFD	; 253
+ 63e:	08 95       	ret
+		}
+		else
+		{
+			if (gu8_Index == MAX_TASK_COUNT)
+			{
+				u8_status = TMU_ERROR_BASE + ERROR_FULL_BUFFER;
+ 640:	8b ef       	ldi	r24, 0xFB	; 251
 		} /* end of else */
-	} /* end of outer else */
+	}
+  } /* end of outer else */
 
 	return u8_status;
 }
- 63a:	08 95       	ret
+ 642:	08 95       	ret
 
-0000063c <TMU_Stop>:
+00000644 <TMU_Stop>:
 * @param: gptrTMU_Function: pointer to callback function
 * @return: ERROR_STATUS status code with error code if one occurred
 */
  
 ERROR_STATUS TMU_Stop(gptrTMU_Function_t gptrTMU_Function)
 {
- 63c:	ef 92       	push	r14
- 63e:	ff 92       	push	r15
- 640:	0f 93       	push	r16
- 642:	1f 93       	push	r17
- 644:	cf 93       	push	r28
- 646:	df 93       	push	r29
+ 644:	ef 92       	push	r14
+ 646:	ff 92       	push	r15
+ 648:	0f 93       	push	r16
+ 64a:	1f 93       	push	r17
+ 64c:	cf 93       	push	r28
+ 64e:	df 93       	push	r29
 		ERROR_STATUS u8_status = E_OK;
 */
 		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
 		
 
 	if(gsu8_TMUInitStatus == NOT_INITIALIZED)
- 648:	20 91 6c 00 	lds	r18, 0x006C	; 0x80006c <gsu8_TMUInitStatus>
- 64c:	22 23       	and	r18, r18
- 64e:	09 f4       	brne	.+2      	; 0x652 <TMU_Stop+0x16>
- 650:	60 c0       	rjmp	.+192    	; 0x712 <TMU_Stop+0xd6>
+ 650:	20 91 6c 00 	lds	r18, 0x006C	; 0x80006c <gsu8_TMUInitStatus>
+ 654:	22 23       	and	r18, r18
+ 656:	09 f4       	brne	.+2      	; 0x65a <TMU_Stop+0x16>
+ 658:	60 c0       	rjmp	.+192    	; 0x71a <TMU_Stop+0xd6>
 	}
 	else
 	{
 		uint8_t u8_Counter;
 
 		if(gu8_Index == 0)
- 652:	a0 91 69 00 	lds	r26, 0x0069	; 0x800069 <gu8_Index>
- 656:	aa 23       	and	r26, r26
- 658:	09 f4       	brne	.+2      	; 0x65c <TMU_Stop+0x20>
- 65a:	56 c0       	rjmp	.+172    	; 0x708 <TMU_Stop+0xcc>
- 65c:	ef e6       	ldi	r30, 0x6F	; 111
- 65e:	f0 e0       	ldi	r31, 0x00	; 0
- 660:	45 eb       	ldi	r20, 0xB5	; 181
- 662:	50 e0       	ldi	r21, 0x00	; 0
+ 65a:	a0 91 69 00 	lds	r26, 0x0069	; 0x800069 <gu8_Index>
+ 65e:	aa 23       	and	r26, r26
+ 660:	09 f4       	brne	.+2      	; 0x664 <TMU_Stop+0x20>
+ 662:	56 c0       	rjmp	.+172    	; 0x710 <TMU_Stop+0xcc>
+ 664:	ef e6       	ldi	r30, 0x6F	; 111
+ 666:	f0 e0       	ldi	r31, 0x00	; 0
+ 668:	45 eb       	ldi	r20, 0xB5	; 181
+ 66a:	50 e0       	ldi	r21, 0x00	; 0
 		}
 		else
 		{
 			for(u8_Counter = 0; u8_Counter < MAX_TASK_COUNT; u8_Counter++)
 			{
 				if(gastrTMU_Buff[u8_Counter].gptrTMU_Function == gptrTMU_Function)
- 664:	20 81       	ld	r18, Z
- 666:	31 81       	ldd	r19, Z+1	; 0x01
- 668:	28 17       	cp	r18, r24
- 66a:	39 07       	cpc	r19, r25
- 66c:	09 f0       	breq	.+2      	; 0x670 <TMU_Stop+0x34>
- 66e:	41 c0       	rjmp	.+130    	; 0x6f2 <TMU_Stop+0xb6>
+ 66c:	20 81       	ld	r18, Z
+ 66e:	31 81       	ldd	r19, Z+1	; 0x01
+ 670:	28 17       	cp	r18, r24
+ 672:	39 07       	cpc	r19, r25
+ 674:	09 f0       	breq	.+2      	; 0x678 <TMU_Stop+0x34>
+ 676:	41 c0       	rjmp	.+130    	; 0x6fa <TMU_Stop+0xb6>
 				{
 					/* Check if one task exist or full */
 					if((gu8_Index == 1) || (gu8_Index == MAX_TASK_COUNT))
- 670:	a1 30       	cpi	r26, 0x01	; 1
- 672:	11 f0       	breq	.+4      	; 0x678 <TMU_Stop+0x3c>
- 674:	aa 30       	cpi	r26, 0x0A	; 10
- 676:	79 f4       	brne	.+30     	; 0x696 <TMU_Stop+0x5a>
+ 678:	a1 30       	cpi	r26, 0x01	; 1
+ 67a:	11 f0       	breq	.+4      	; 0x680 <TMU_Stop+0x3c>
+ 67c:	aa 30       	cpi	r26, 0x0A	; 10
+ 67e:	79 f4       	brne	.+30     	; 0x69e <TMU_Stop+0x5a>
 	#endif
 }
 
 static void TMU_ClearTask(uint8_t u8_index){
 	
 	  gastrTMU_Buff[gu8_Index].gptrTMU_Function			= NULL;
- 678:	27 e0       	ldi	r18, 0x07	; 7
- 67a:	a2 9f       	mul	r26, r18
- 67c:	e0 01       	movw	r28, r0
- 67e:	11 24       	eor	r1, r1
- 680:	c1 59       	subi	r28, 0x91	; 145
- 682:	df 4f       	sbci	r29, 0xFF	; 255
- 684:	19 82       	std	Y+1, r1	; 0x01
- 686:	18 82       	st	Y, r1
+ 680:	27 e0       	ldi	r18, 0x07	; 7
+ 682:	a2 9f       	mul	r26, r18
+ 684:	e0 01       	movw	r28, r0
+ 686:	11 24       	eor	r1, r1
+ 688:	c1 59       	subi	r28, 0x91	; 145
+ 68a:	df 4f       	sbci	r29, 0xFF	; 255
+ 68c:	19 82       	std	Y+1, r1	; 0x01
+ 68e:	18 82       	st	Y, r1
 	  gastrTMU_Buff[gu8_Index].u16_Delay				= 0;
- 688:	1b 82       	std	Y+3, r1	; 0x03
- 68a:	1a 82       	std	Y+2, r1	; 0x02
+ 690:	1b 82       	std	Y+3, r1	; 0x03
+ 692:	1a 82       	std	Y+2, r1	; 0x02
 	  gastrTMU_Buff[gu8_Index].u16_MilliSecond_Count    = 0;
- 68c:	1d 82       	std	Y+5, r1	; 0x05
- 68e:	1c 82       	std	Y+4, r1	; 0x04
+ 694:	1d 82       	std	Y+5, r1	; 0x05
+ 696:	1c 82       	std	Y+4, r1	; 0x04
 	  gastrTMU_Buff[gu8_Index].u8_Periodicity			= 0;
- 690:	1e 82       	std	Y+6, r1	; 0x06
+ 698:	1e 82       	std	Y+6, r1	; 0x06
 				{
 					/* Check if one task exist or full */
 					if((gu8_Index == 1) || (gu8_Index == MAX_TASK_COUNT))
 					{
 						TMU_ClearTask(gu8_Index);
 						gu8_Index--;
- 692:	a1 50       	subi	r26, 0x01	; 1
- 694:	2e c0       	rjmp	.+92     	; 0x6f2 <TMU_Stop+0xb6>
+ 69a:	a1 50       	subi	r26, 0x01	; 1
+ 69c:	2e c0       	rjmp	.+92     	; 0x6fa <TMU_Stop+0xb6>
 					}
 					else
 					{
 						TMU_ShiftTasks(u8_Counter , (gu8_Index-1));
- 696:	6f ef       	ldi	r22, 0xFF	; 255
- 698:	6a 0f       	add	r22, r26
+ 69e:	6f ef       	ldi	r22, 0xFF	; 255
+ 6a0:	6a 0f       	add	r22, r26
 }
 
 static void TMU_ShiftTasks(uint8_t newIndex, uint8_t oldIndex){
 	
 	
 	  gastrTMU_Buff[newIndex].gptrTMU_Function		= gastrTMU_Buff[oldIndex].gptrTMU_Function;
- 69a:	77 e0       	ldi	r23, 0x07	; 7
- 69c:	67 9f       	mul	r22, r23
- 69e:	90 01       	movw	r18, r0
- 6a0:	11 24       	eor	r1, r1
- 6a2:	21 59       	subi	r18, 0x91	; 145
- 6a4:	3f 4f       	sbci	r19, 0xFF	; 255
- 6a6:	e9 01       	movw	r28, r18
- 6a8:	08 81       	ld	r16, Y
- 6aa:	19 81       	ldd	r17, Y+1	; 0x01
- 6ac:	11 83       	std	Z+1, r17	; 0x01
- 6ae:	00 83       	st	Z, r16
+ 6a2:	77 e0       	ldi	r23, 0x07	; 7
+ 6a4:	67 9f       	mul	r22, r23
+ 6a6:	90 01       	movw	r18, r0
+ 6a8:	11 24       	eor	r1, r1
+ 6aa:	21 59       	subi	r18, 0x91	; 145
+ 6ac:	3f 4f       	sbci	r19, 0xFF	; 255
+ 6ae:	e9 01       	movw	r28, r18
+ 6b0:	08 81       	ld	r16, Y
+ 6b2:	19 81       	ldd	r17, Y+1	; 0x01
+ 6b4:	11 83       	std	Z+1, r17	; 0x01
+ 6b6:	00 83       	st	Z, r16
 	  gastrTMU_Buff[newIndex].u16_Delay				= gastrTMU_Buff[oldIndex].u16_Delay;
- 6b0:	e9 01       	movw	r28, r18
- 6b2:	0a 81       	ldd	r16, Y+2	; 0x02
- 6b4:	1b 81       	ldd	r17, Y+3	; 0x03
- 6b6:	13 83       	std	Z+3, r17	; 0x03
- 6b8:	02 83       	std	Z+2, r16	; 0x02
+ 6b8:	e9 01       	movw	r28, r18
+ 6ba:	0a 81       	ldd	r16, Y+2	; 0x02
+ 6bc:	1b 81       	ldd	r17, Y+3	; 0x03
+ 6be:	13 83       	std	Z+3, r17	; 0x03
+ 6c0:	02 83       	std	Z+2, r16	; 0x02
 	  gastrTMU_Buff[newIndex].u16_MilliSecond_Count = gastrTMU_Buff[oldIndex].u16_MilliSecond_Count;
- 6ba:	e9 01       	movw	r28, r18
- 6bc:	0c 81       	ldd	r16, Y+4	; 0x04
- 6be:	1d 81       	ldd	r17, Y+5	; 0x05
- 6c0:	15 83       	std	Z+5, r17	; 0x05
- 6c2:	04 83       	std	Z+4, r16	; 0x04
+ 6c2:	e9 01       	movw	r28, r18
+ 6c4:	0c 81       	ldd	r16, Y+4	; 0x04
+ 6c6:	1d 81       	ldd	r17, Y+5	; 0x05
+ 6c8:	15 83       	std	Z+5, r17	; 0x05
+ 6ca:	04 83       	std	Z+4, r16	; 0x04
 	  gastrTMU_Buff[newIndex].u8_Periodicity		= gastrTMU_Buff[oldIndex].u8_Periodicity;
- 6c4:	e9 01       	movw	r28, r18
- 6c6:	2e 81       	ldd	r18, Y+6	; 0x06
- 6c8:	26 83       	std	Z+6, r18	; 0x06
+ 6cc:	e9 01       	movw	r28, r18
+ 6ce:	2e 81       	ldd	r18, Y+6	; 0x06
+ 6d0:	26 83       	std	Z+6, r18	; 0x06
 	#endif
 }
 
 static void TMU_ClearTask(uint8_t u8_index){
 	
 	  gastrTMU_Buff[gu8_Index].gptrTMU_Function			= NULL;
- 6ca:	d7 e0       	ldi	r29, 0x07	; 7
- 6cc:	ad 9f       	mul	r26, r29
- 6ce:	d0 01       	movw	r26, r0
- 6d0:	11 24       	eor	r1, r1
- 6d2:	a1 59       	subi	r26, 0x91	; 145
- 6d4:	bf 4f       	sbci	r27, 0xFF	; 255
- 6d6:	11 96       	adiw	r26, 0x01	; 1
- 6d8:	1c 92       	st	X, r1
- 6da:	1e 92       	st	-X, r1
+ 6d2:	d7 e0       	ldi	r29, 0x07	; 7
+ 6d4:	ad 9f       	mul	r26, r29
+ 6d6:	d0 01       	movw	r26, r0
+ 6d8:	11 24       	eor	r1, r1
+ 6da:	a1 59       	subi	r26, 0x91	; 145
+ 6dc:	bf 4f       	sbci	r27, 0xFF	; 255
+ 6de:	11 96       	adiw	r26, 0x01	; 1
+ 6e0:	1c 92       	st	X, r1
+ 6e2:	1e 92       	st	-X, r1
 	  gastrTMU_Buff[gu8_Index].u16_Delay				= 0;
- 6dc:	13 96       	adiw	r26, 0x03	; 3
- 6de:	1c 92       	st	X, r1
- 6e0:	1e 92       	st	-X, r1
- 6e2:	12 97       	sbiw	r26, 0x02	; 2
-	  gastrTMU_Buff[gu8_Index].u16_MilliSecond_Count    = 0;
- 6e4:	15 96       	adiw	r26, 0x05	; 5
+ 6e4:	13 96       	adiw	r26, 0x03	; 3
  6e6:	1c 92       	st	X, r1
  6e8:	1e 92       	st	-X, r1
- 6ea:	14 97       	sbiw	r26, 0x04	; 4
-	  gastrTMU_Buff[gu8_Index].u8_Periodicity			= 0;
- 6ec:	16 96       	adiw	r26, 0x06	; 6
+ 6ea:	12 97       	sbiw	r26, 0x02	; 2
+	  gastrTMU_Buff[gu8_Index].u16_MilliSecond_Count    = 0;
+ 6ec:	15 96       	adiw	r26, 0x05	; 5
  6ee:	1c 92       	st	X, r1
+ 6f0:	1e 92       	st	-X, r1
+ 6f2:	14 97       	sbiw	r26, 0x04	; 4
+	  gastrTMU_Buff[gu8_Index].u8_Periodicity			= 0;
+ 6f4:	16 96       	adiw	r26, 0x06	; 6
+ 6f6:	1c 92       	st	X, r1
 					else
 					{
 						TMU_ShiftTasks(u8_Counter , (gu8_Index-1));
 
 						TMU_ClearTask((gu8_Index-1));
 						gu8_Index--;
- 6f0:	a6 2f       	mov	r26, r22
- 6f2:	37 96       	adiw	r30, 0x07	; 7
+ 6f8:	a6 2f       	mov	r26, r22
+ 6fa:	37 96       	adiw	r30, 0x07	; 7
 		{
 			u8_status = TMU_ERROR_BASE + ERROR_EMPTY_BUFFER;
 		}
 		else
 		{
 			for(u8_Counter = 0; u8_Counter < MAX_TASK_COUNT; u8_Counter++)
- 6f4:	e4 17       	cp	r30, r20
- 6f6:	f5 07       	cpc	r31, r21
- 6f8:	09 f0       	breq	.+2      	; 0x6fc <TMU_Stop+0xc0>
- 6fa:	b4 cf       	rjmp	.-152    	; 0x664 <TMU_Stop+0x28>
- 6fc:	a0 93 69 00 	sts	0x0069, r26	; 0x800069 <gu8_Index>
+ 6fc:	e4 17       	cp	r30, r20
+ 6fe:	f5 07       	cpc	r31, r21
+ 700:	09 f0       	breq	.+2      	; 0x704 <TMU_Stop+0xc0>
+ 702:	b4 cf       	rjmp	.-152    	; 0x66c <TMU_Stop+0x28>
+ 704:	a0 93 69 00 	sts	0x0069, r26	; 0x800069 <gu8_Index>
 			}
 		}
 
 		/*  if buffer is empty so stop the timer */
 		
 		if(gu8_Index == 0)
- 700:	a1 11       	cpse	r26, r1
- 702:	09 c0       	rjmp	.+18     	; 0x716 <TMU_Stop+0xda>
+ 708:	a1 11       	cpse	r26, r1
+ 70a:	09 c0       	rjmp	.+18     	; 0x71e <TMU_Stop+0xda>
 ERROR_STATUS TMU_Stop(gptrTMU_Function_t gptrTMU_Function)
 {
 		/*
 		ERROR_STATUS u8_status = E_OK;
 */
 		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
- 704:	c0 e0       	ldi	r28, 0x00	; 0
- 706:	01 c0       	rjmp	.+2      	; 0x70a <TMU_Stop+0xce>
+ 70c:	c0 e0       	ldi	r28, 0x00	; 0
+ 70e:	01 c0       	rjmp	.+2      	; 0x712 <TMU_Stop+0xce>
 	{
 		uint8_t u8_Counter;
 
 		if(gu8_Index == 0)
 		{
 			u8_status = TMU_ERROR_BASE + ERROR_EMPTY_BUFFER;
- 708:	cc ef       	ldi	r28, 0xFC	; 252
+ 710:	cc ef       	ldi	r28, 0xFC	; 252
 		/*  if buffer is empty so stop the timer */
 		
 		if(gu8_Index == 0)
 		{
 			#if  TMU_TIMER_CH0
 			Timer_Stop(TIMER_CH0);
- 70a:	80 e0       	ldi	r24, 0x00	; 0
- 70c:	0e 94 55 02 	call	0x4aa	; 0x4aa <Timer_Stop>
- 710:	03 c0       	rjmp	.+6      	; 0x718 <TMU_Stop+0xdc>
+ 712:	80 e0       	ldi	r24, 0x00	; 0
+ 714:	0e 94 55 02 	call	0x4aa	; 0x4aa <Timer_Stop>
+ 718:	03 c0       	rjmp	.+6      	; 0x720 <TMU_Stop+0xdc>
 		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
 		
 
 	if(gsu8_TMUInitStatus == NOT_INITIALIZED)
 	{
 		u8_status = TMU_ERROR_BASE + ERROR_NOT_INITIALIZED;
- 712:	cf ef       	ldi	r28, 0xFF	; 255
- 714:	01 c0       	rjmp	.+2      	; 0x718 <TMU_Stop+0xdc>
+ 71a:	cf ef       	ldi	r28, 0xFF	; 255
+ 71c:	01 c0       	rjmp	.+2      	; 0x720 <TMU_Stop+0xdc>
 ERROR_STATUS TMU_Stop(gptrTMU_Function_t gptrTMU_Function)
 {
 		/*
 		ERROR_STATUS u8_status = E_OK;
 */
 		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
- 716:	c0 e0       	ldi	r28, 0x00	; 0
+ 71e:	c0 e0       	ldi	r28, 0x00	; 0
 			Timer_Stop(TIMER_CH2);
 			#endif
 		}
 	}
 	return u8_status;
 }
- 718:	8c 2f       	mov	r24, r28
- 71a:	df 91       	pop	r29
- 71c:	cf 91       	pop	r28
- 71e:	1f 91       	pop	r17
- 720:	0f 91       	pop	r16
- 722:	ff 90       	pop	r15
- 724:	ef 90       	pop	r14
- 726:	08 95       	ret
+ 720:	8c 2f       	mov	r24, r28
+ 722:	df 91       	pop	r29
+ 724:	cf 91       	pop	r28
+ 726:	1f 91       	pop	r17
+ 728:	0f 91       	pop	r16
+ 72a:	ff 90       	pop	r15
+ 72c:	ef 90       	pop	r14
+ 72e:	08 95       	ret
 
-00000728 <TMU_Dispatcher>:
+00000730 <TMU_Dispatcher>:
 * Input : void
 * Output: None
 * @return: ERROR_STATUS status code with error code if one occurred
 */
 ERROR_STATUS TMU_Dispatcher(void)
 {
- 728:	cf 92       	push	r12
- 72a:	df 92       	push	r13
- 72c:	ff 92       	push	r15
- 72e:	0f 93       	push	r16
- 730:	1f 93       	push	r17
- 732:	cf 93       	push	r28
- 734:	df 93       	push	r29
+ 730:	cf 92       	push	r12
+ 732:	df 92       	push	r13
+ 734:	ff 92       	push	r15
+ 736:	0f 93       	push	r16
+ 738:	1f 93       	push	r17
+ 73a:	cf 93       	push	r28
+ 73c:	df 93       	push	r29
 		ERROR_STATUS u8_status = E_OK;
 */
 		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
 		
 
 	if(gu8_TMU_TimerOvf_Flag == OVF_TRIGGERED)
- 736:	80 91 6b 00 	lds	r24, 0x006B	; 0x80006b <gu8_TMU_TimerOvf_Flag>
- 73a:	81 30       	cpi	r24, 0x01	; 1
- 73c:	09 f0       	breq	.+2      	; 0x740 <TMU_Dispatcher+0x18>
- 73e:	73 c0       	rjmp	.+230    	; 0x826 <TMU_Dispatcher+0xfe>
+ 73e:	80 91 6b 00 	lds	r24, 0x006B	; 0x80006b <gu8_TMU_TimerOvf_Flag>
+ 742:	81 30       	cpi	r24, 0x01	; 1
+ 744:	09 f0       	breq	.+2      	; 0x748 <TMU_Dispatcher+0x18>
+ 746:	73 c0       	rjmp	.+230    	; 0x82e <TMU_Dispatcher+0xfe>
 	{
 		uint8_t u8_Counter;
 			
 		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
- 740:	80 91 69 00 	lds	r24, 0x0069	; 0x800069 <gu8_Index>
- 744:	88 23       	and	r24, r24
- 746:	09 f4       	brne	.+2      	; 0x74a <TMU_Dispatcher+0x22>
- 748:	70 c0       	rjmp	.+224    	; 0x82a <TMU_Dispatcher+0x102>
- 74a:	ef e6       	ldi	r30, 0x6F	; 111
- 74c:	f0 e0       	ldi	r31, 0x00	; 0
- 74e:	81 50       	subi	r24, 0x01	; 1
- 750:	90 e0       	ldi	r25, 0x00	; 0
- 752:	01 96       	adiw	r24, 0x01	; 1
- 754:	9c 01       	movw	r18, r24
- 756:	22 0f       	add	r18, r18
- 758:	33 1f       	adc	r19, r19
- 75a:	22 0f       	add	r18, r18
- 75c:	33 1f       	adc	r19, r19
+ 748:	80 91 69 00 	lds	r24, 0x0069	; 0x800069 <gu8_Index>
+ 74c:	88 23       	and	r24, r24
+ 74e:	09 f4       	brne	.+2      	; 0x752 <TMU_Dispatcher+0x22>
+ 750:	70 c0       	rjmp	.+224    	; 0x832 <TMU_Dispatcher+0x102>
+ 752:	ef e6       	ldi	r30, 0x6F	; 111
+ 754:	f0 e0       	ldi	r31, 0x00	; 0
+ 756:	81 50       	subi	r24, 0x01	; 1
+ 758:	90 e0       	ldi	r25, 0x00	; 0
+ 75a:	01 96       	adiw	r24, 0x01	; 1
+ 75c:	9c 01       	movw	r18, r24
  75e:	22 0f       	add	r18, r18
  760:	33 1f       	adc	r19, r19
- 762:	28 1b       	sub	r18, r24
- 764:	39 0b       	sbc	r19, r25
- 766:	21 59       	subi	r18, 0x91	; 145
- 768:	3f 4f       	sbci	r19, 0xFF	; 255
- 76a:	d0 e0       	ldi	r29, 0x00	; 0
+ 762:	22 0f       	add	r18, r18
+ 764:	33 1f       	adc	r19, r19
+ 766:	22 0f       	add	r18, r18
+ 768:	33 1f       	adc	r19, r19
+ 76a:	28 1b       	sub	r18, r24
+ 76c:	39 0b       	sbc	r19, r25
+ 76e:	21 59       	subi	r18, 0x91	; 145
+ 770:	3f 4f       	sbci	r19, 0xFF	; 255
+ 772:	d0 e0       	ldi	r29, 0x00	; 0
 		{
 			if(NULL == gastrTMU_Buff[u8_Counter].gptrTMU_Function)
 			{
 				/* skip for now until making circular buffer */
 				u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
- 76c:	4d ef       	ldi	r20, 0xFD	; 253
+ 774:	4d ef       	ldi	r20, 0xFD	; 253
 	{
 		uint8_t u8_Counter;
 			
 		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
 		{
 			if(NULL == gastrTMU_Buff[u8_Counter].gptrTMU_Function)
- 76e:	80 81       	ld	r24, Z
- 770:	91 81       	ldd	r25, Z+1	; 0x01
- 772:	89 2b       	or	r24, r25
- 774:	31 f0       	breq	.+12     	; 0x782 <TMU_Dispatcher+0x5a>
+ 776:	80 81       	ld	r24, Z
+ 778:	91 81       	ldd	r25, Z+1	; 0x01
+ 77a:	89 2b       	or	r24, r25
+ 77c:	31 f0       	breq	.+12     	; 0x78a <TMU_Dispatcher+0x5a>
 				u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
 
 			}
 			else
 			{
 				gastrTMU_Buff[u8_Counter].u16_MilliSecond_Count++;
- 776:	84 81       	ldd	r24, Z+4	; 0x04
- 778:	95 81       	ldd	r25, Z+5	; 0x05
- 77a:	01 96       	adiw	r24, 0x01	; 1
- 77c:	95 83       	std	Z+5, r25	; 0x05
- 77e:	84 83       	std	Z+4, r24	; 0x04
- 780:	01 c0       	rjmp	.+2      	; 0x784 <TMU_Dispatcher+0x5c>
+ 77e:	84 81       	ldd	r24, Z+4	; 0x04
+ 780:	95 81       	ldd	r25, Z+5	; 0x05
+ 782:	01 96       	adiw	r24, 0x01	; 1
+ 784:	95 83       	std	Z+5, r25	; 0x05
+ 786:	84 83       	std	Z+4, r24	; 0x04
+ 788:	01 c0       	rjmp	.+2      	; 0x78c <TMU_Dispatcher+0x5c>
 		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
 		{
 			if(NULL == gastrTMU_Buff[u8_Counter].gptrTMU_Function)
 			{
 				/* skip for now until making circular buffer */
 				u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
- 782:	d4 2f       	mov	r29, r20
- 784:	37 96       	adiw	r30, 0x07	; 7
+ 78a:	d4 2f       	mov	r29, r20
+ 78c:	37 96       	adiw	r30, 0x07	; 7
 
 	if(gu8_TMU_TimerOvf_Flag == OVF_TRIGGERED)
 	{
 		uint8_t u8_Counter;
 			
 		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
- 786:	2e 17       	cp	r18, r30
- 788:	3f 07       	cpc	r19, r31
- 78a:	89 f7       	brne	.-30     	; 0x76e <TMU_Dispatcher+0x46>
- 78c:	c0 e0       	ldi	r28, 0x00	; 0
+ 78e:	2e 17       	cp	r18, r30
+ 790:	3f 07       	cpc	r19, r31
+ 792:	89 f7       	brne	.-30     	; 0x776 <TMU_Dispatcher+0x46>
+ 794:	c0 e0       	ldi	r28, 0x00	; 0
 		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
 		{
 			if(NULL == gastrTMU_Buff[u8_Counter].gptrTMU_Function)
 			{
 				/* skip for now until making circular buffer */
 				u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
- 78e:	0f 2e       	mov	r0, r31
- 790:	fd ef       	ldi	r31, 0xFD	; 253
- 792:	ff 2e       	mov	r15, r31
- 794:	f0 2d       	mov	r31, r0
+ 796:	0f 2e       	mov	r0, r31
+ 798:	fd ef       	ldi	r31, 0xFD	; 253
+ 79a:	ff 2e       	mov	r15, r31
+ 79c:	f0 2d       	mov	r31, r0
 
 		/* Loop through TCB buffer and execute the tasks */
 		
 		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
 		{
 			if(NULL == gastrTMU_Buff[u8_Counter].gptrTMU_Function)
- 796:	0c 2f       	mov	r16, r28
- 798:	10 e0       	ldi	r17, 0x00	; 0
- 79a:	27 e0       	ldi	r18, 0x07	; 7
- 79c:	c2 9f       	mul	r28, r18
- 79e:	f0 01       	movw	r30, r0
- 7a0:	11 24       	eor	r1, r1
- 7a2:	e1 59       	subi	r30, 0x91	; 145
- 7a4:	ff 4f       	sbci	r31, 0xFF	; 255
- 7a6:	01 90       	ld	r0, Z+
- 7a8:	f0 81       	ld	r31, Z
- 7aa:	e0 2d       	mov	r30, r0
- 7ac:	30 97       	sbiw	r30, 0x00	; 0
- 7ae:	99 f1       	breq	.+102    	; 0x816 <TMU_Dispatcher+0xee>
+ 79e:	0c 2f       	mov	r16, r28
+ 7a0:	10 e0       	ldi	r17, 0x00	; 0
+ 7a2:	27 e0       	ldi	r18, 0x07	; 7
+ 7a4:	c2 9f       	mul	r28, r18
+ 7a6:	f0 01       	movw	r30, r0
+ 7a8:	11 24       	eor	r1, r1
+ 7aa:	e1 59       	subi	r30, 0x91	; 145
+ 7ac:	ff 4f       	sbci	r31, 0xFF	; 255
+ 7ae:	01 90       	ld	r0, Z+
+ 7b0:	f0 81       	ld	r31, Z
+ 7b2:	e0 2d       	mov	r30, r0
+ 7b4:	30 97       	sbiw	r30, 0x00	; 0
+ 7b6:	99 f1       	breq	.+102    	; 0x81e <TMU_Dispatcher+0xee>
 			}
 			else
 			{
 				/* if the delay is complete */
 				
 			if(gastrTMU_Buff[u8_Counter].u16_MilliSecond_Count >= gastrTMU_Buff[u8_Counter].u16_Delay)
- 7b0:	d8 01       	movw	r26, r16
- 7b2:	aa 0f       	add	r26, r26
- 7b4:	bb 1f       	adc	r27, r27
- 7b6:	aa 0f       	add	r26, r26
- 7b8:	bb 1f       	adc	r27, r27
+ 7b8:	d8 01       	movw	r26, r16
  7ba:	aa 0f       	add	r26, r26
  7bc:	bb 1f       	adc	r27, r27
- 7be:	a0 1b       	sub	r26, r16
- 7c0:	b1 0b       	sbc	r27, r17
- 7c2:	a1 59       	subi	r26, 0x91	; 145
- 7c4:	bf 4f       	sbci	r27, 0xFF	; 255
- 7c6:	14 96       	adiw	r26, 0x04	; 4
- 7c8:	2d 91       	ld	r18, X+
- 7ca:	3c 91       	ld	r19, X
- 7cc:	15 97       	sbiw	r26, 0x05	; 5
- 7ce:	12 96       	adiw	r26, 0x02	; 2
- 7d0:	8d 91       	ld	r24, X+
- 7d2:	9c 91       	ld	r25, X
- 7d4:	13 97       	sbiw	r26, 0x03	; 3
- 7d6:	28 17       	cp	r18, r24
- 7d8:	39 07       	cpc	r19, r25
- 7da:	f0 f0       	brcs	.+60     	; 0x818 <TMU_Dispatcher+0xf0>
+ 7be:	aa 0f       	add	r26, r26
+ 7c0:	bb 1f       	adc	r27, r27
+ 7c2:	aa 0f       	add	r26, r26
+ 7c4:	bb 1f       	adc	r27, r27
+ 7c6:	a0 1b       	sub	r26, r16
+ 7c8:	b1 0b       	sbc	r27, r17
+ 7ca:	a1 59       	subi	r26, 0x91	; 145
+ 7cc:	bf 4f       	sbci	r27, 0xFF	; 255
+ 7ce:	14 96       	adiw	r26, 0x04	; 4
+ 7d0:	2d 91       	ld	r18, X+
+ 7d2:	3c 91       	ld	r19, X
+ 7d4:	15 97       	sbiw	r26, 0x05	; 5
+ 7d6:	12 96       	adiw	r26, 0x02	; 2
+ 7d8:	8d 91       	ld	r24, X+
+ 7da:	9c 91       	ld	r25, X
+ 7dc:	13 97       	sbiw	r26, 0x03	; 3
+ 7de:	28 17       	cp	r18, r24
+ 7e0:	39 07       	cpc	r19, r25
+ 7e2:	f0 f0       	brcs	.+60     	; 0x820 <TMU_Dispatcher+0xf0>
 				{
 					gastrTMU_Buff[u8_Counter].u16_MilliSecond_Count = 0;
- 7dc:	68 01       	movw	r12, r16
- 7de:	cc 0c       	add	r12, r12
- 7e0:	dd 1c       	adc	r13, r13
- 7e2:	cc 0c       	add	r12, r12
- 7e4:	dd 1c       	adc	r13, r13
+ 7e4:	68 01       	movw	r12, r16
  7e6:	cc 0c       	add	r12, r12
  7e8:	dd 1c       	adc	r13, r13
- 7ea:	c6 01       	movw	r24, r12
- 7ec:	80 1b       	sub	r24, r16
- 7ee:	91 0b       	sbc	r25, r17
- 7f0:	dc 01       	movw	r26, r24
- 7f2:	a1 59       	subi	r26, 0x91	; 145
- 7f4:	bf 4f       	sbci	r27, 0xFF	; 255
- 7f6:	6d 01       	movw	r12, r26
- 7f8:	15 96       	adiw	r26, 0x05	; 5
- 7fa:	1c 92       	st	X, r1
- 7fc:	1e 92       	st	-X, r1
- 7fe:	14 97       	sbiw	r26, 0x04	; 4
+ 7ea:	cc 0c       	add	r12, r12
+ 7ec:	dd 1c       	adc	r13, r13
+ 7ee:	cc 0c       	add	r12, r12
+ 7f0:	dd 1c       	adc	r13, r13
+ 7f2:	c6 01       	movw	r24, r12
+ 7f4:	80 1b       	sub	r24, r16
+ 7f6:	91 0b       	sbc	r25, r17
+ 7f8:	dc 01       	movw	r26, r24
+ 7fa:	a1 59       	subi	r26, 0x91	; 145
+ 7fc:	bf 4f       	sbci	r27, 0xFF	; 255
+ 7fe:	6d 01       	movw	r12, r26
+ 800:	15 96       	adiw	r26, 0x05	; 5
+ 802:	1c 92       	st	X, r1
+ 804:	1e 92       	st	-X, r1
+ 806:	14 97       	sbiw	r26, 0x04	; 4
 
 					gastrTMU_Buff[u8_Counter].gptrTMU_Function();
- 800:	09 95       	icall
+ 808:	09 95       	icall
 								
 					if(gastrTMU_Buff[u8_Counter].u8_Periodicity == ONE_SHOT)
- 802:	f6 01       	movw	r30, r12
- 804:	86 81       	ldd	r24, Z+6	; 0x06
- 806:	81 30       	cpi	r24, 0x01	; 1
- 808:	39 f4       	brne	.+14     	; 0x818 <TMU_Dispatcher+0xf0>
+ 80a:	f6 01       	movw	r30, r12
+ 80c:	86 81       	ldd	r24, Z+6	; 0x06
+ 80e:	81 30       	cpi	r24, 0x01	; 1
+ 810:	39 f4       	brne	.+14     	; 0x820 <TMU_Dispatcher+0xf0>
 					{
 						TMU_Stop(gastrTMU_Buff[u8_Counter].gptrTMU_Function);
- 80a:	f6 01       	movw	r30, r12
- 80c:	80 81       	ld	r24, Z
- 80e:	91 81       	ldd	r25, Z+1	; 0x01
- 810:	0e 94 1e 03 	call	0x63c	; 0x63c <TMU_Stop>
- 814:	01 c0       	rjmp	.+2      	; 0x818 <TMU_Dispatcher+0xf0>
+ 812:	f6 01       	movw	r30, r12
+ 814:	80 81       	ld	r24, Z
+ 816:	91 81       	ldd	r25, Z+1	; 0x01
+ 818:	0e 94 22 03 	call	0x644	; 0x644 <TMU_Stop>
+ 81c:	01 c0       	rjmp	.+2      	; 0x820 <TMU_Dispatcher+0xf0>
 		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
 		{
 			if(NULL == gastrTMU_Buff[u8_Counter].gptrTMU_Function)
 			{
 				/* skip for now until making circular buffer */
 				u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
- 816:	df 2d       	mov	r29, r15
+ 81e:	df 2d       	mov	r29, r15
 		}
 
 
 		/* Loop through TCB buffer and execute the tasks */
 		
 		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
- 818:	cf 5f       	subi	r28, 0xFF	; 255
- 81a:	80 91 69 00 	lds	r24, 0x0069	; 0x800069 <gu8_Index>
- 81e:	c8 17       	cp	r28, r24
- 820:	08 f4       	brcc	.+2      	; 0x824 <TMU_Dispatcher+0xfc>
- 822:	b9 cf       	rjmp	.-142    	; 0x796 <TMU_Dispatcher+0x6e>
- 824:	03 c0       	rjmp	.+6      	; 0x82c <TMU_Dispatcher+0x104>
+ 820:	cf 5f       	subi	r28, 0xFF	; 255
+ 822:	80 91 69 00 	lds	r24, 0x0069	; 0x800069 <gu8_Index>
+ 826:	c8 17       	cp	r28, r24
+ 828:	08 f4       	brcc	.+2      	; 0x82c <TMU_Dispatcher+0xfc>
+ 82a:	b9 cf       	rjmp	.-142    	; 0x79e <TMU_Dispatcher+0x6e>
+ 82c:	03 c0       	rjmp	.+6      	; 0x834 <TMU_Dispatcher+0x104>
 ERROR_STATUS TMU_Dispatcher(void)
 {
 		/*
 		ERROR_STATUS u8_status = E_OK;
 */
 		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
- 826:	d0 e0       	ldi	r29, 0x00	; 0
- 828:	01 c0       	rjmp	.+2      	; 0x82c <TMU_Dispatcher+0x104>
+ 82e:	d0 e0       	ldi	r29, 0x00	; 0
+ 830:	01 c0       	rjmp	.+2      	; 0x834 <TMU_Dispatcher+0x104>
 
 	if(gu8_TMU_TimerOvf_Flag == OVF_TRIGGERED)
 	{
 		uint8_t u8_Counter;
 			
 		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
- 82a:	d0 e0       	ldi	r29, 0x00	; 0
+ 832:	d0 e0       	ldi	r29, 0x00	; 0
 	else
 	{
 		/*u8_status = E_NOK;*/
 	}
 	return u8_status;
 }
- 82c:	8d 2f       	mov	r24, r29
- 82e:	df 91       	pop	r29
- 830:	cf 91       	pop	r28
- 832:	1f 91       	pop	r17
- 834:	0f 91       	pop	r16
- 836:	ff 90       	pop	r15
- 838:	df 90       	pop	r13
- 83a:	cf 90       	pop	r12
- 83c:	08 95       	ret
+ 834:	8d 2f       	mov	r24, r29
+ 836:	df 91       	pop	r29
+ 838:	cf 91       	pop	r28
+ 83a:	1f 91       	pop	r17
+ 83c:	0f 91       	pop	r16
+ 83e:	ff 90       	pop	r15
+ 840:	df 90       	pop	r13
+ 842:	cf 90       	pop	r12
+ 844:	08 95       	ret
 
-0000083e <__tablejump2__>:
- 83e:	ee 0f       	add	r30, r30
- 840:	ff 1f       	adc	r31, r31
- 842:	05 90       	lpm	r0, Z+
- 844:	f4 91       	lpm	r31, Z
- 846:	e0 2d       	mov	r30, r0
- 848:	09 94       	ijmp
+00000846 <__tablejump2__>:
+ 846:	ee 0f       	add	r30, r30
+ 848:	ff 1f       	adc	r31, r31
+ 84a:	05 90       	lpm	r0, Z+
+ 84c:	f4 91       	lpm	r31, Z
+ 84e:	e0 2d       	mov	r30, r0
+ 850:	09 94       	ijmp
 
-0000084a <_exit>:
- 84a:	f8 94       	cli
+00000852 <_exit>:
+ 852:	f8 94       	cli
 
-0000084c <__stop_program>:
- 84c:	ff cf       	rjmp	.-2      	; 0x84c <__stop_program>
+00000854 <__stop_program>:
+ 854:	ff cf       	rjmp	.-2      	; 0x854 <__stop_program>

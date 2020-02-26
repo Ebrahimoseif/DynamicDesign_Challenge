@@ -190,6 +190,11 @@ ERROR_STATUS TMU_Start(gptrTMU_Function_t gptrTMU_Function,
 		}
 		else
 		{
+			if (gu8_Index == MAX_TASK_COUNT)
+			{
+				u8_status = TMU_ERROR_BASE + ERROR_FULL_BUFFER;
+			}
+			else{
 			/* add the task to the buffer */
 			gastrTMU_Buff[gu8_Index].gptrTMU_Function		= gptrTMU_Function;
 			gastrTMU_Buff[gu8_Index].u16_Delay				= u16_Delay;
@@ -213,7 +218,8 @@ ERROR_STATUS TMU_Start(gptrTMU_Function_t gptrTMU_Function,
 
 			gu8_Index++;
 		} /* end of else */
-	} /* end of outer else */
+	}
+  } /* end of outer else */
 
 	return u8_status;
 }
