@@ -1,7 +1,10 @@
-DIO.d DIO.o: .././DIO.c .././DIO.h .././std_types.h .././registers.h
+DIO.d DIO.o: .././DIO.c .././DIO.h ../MCAL/../Util/std_types.h \
+ ../MCAL/../Util/registers.h ../MCAL/../Util/std_types.h
 
 .././DIO.h:
 
-.././std_types.h:
+../MCAL/../Util/std_types.h:
 
-.././registers.h:
+../MCAL/../Util/registers.h:
+
+../MCAL/../Util/std_types.h:

@@ -9,8 +9,8 @@
 #define DIO_H
 
 
-#include "../Util/std_types.h"
-#include "../Util/registers.h"
+#include "Util\std_types.h"
+#include "Util\registers.h"
 
 /************************************************************************/
 /*						PINS/BITS defines                               */

@@ -49,7 +49,7 @@ ERROR_STATUS DIO_init (DIO_Cfg_s *DIO_info){
 			{
 			switch(DIO_info->GPIO){
 				
-				case GPIOA:
+				case 0:
 				if ( DIO_info->dir == INPUT )
 				{
 					PORTA_DIR &= ~(DIO_info->pins); //clear the bits to be inputs
@@ -60,7 +60,7 @@ ERROR_STATUS DIO_init (DIO_Cfg_s *DIO_info){
 				
 				break;
 				
-				case GPIOB:
+				case 1:
 				if ( DIO_info->dir == INPUT )
 				{
 					PORTB_DIR &= ~(DIO_info->pins); //clear the bits to be inputs
@@ -71,7 +71,7 @@ ERROR_STATUS DIO_init (DIO_Cfg_s *DIO_info){
 				
 				break;
 				
-				case GPIOC:
+				case 2:
 				if ( DIO_info->dir == INPUT )
 				{
 					PORTC_DIR &= ~(DIO_info->pins); //clear the bits to be inputs
@@ -82,7 +82,7 @@ ERROR_STATUS DIO_init (DIO_Cfg_s *DIO_info){
 				
 				break;
 				
-				case GPIOD:
+				case 3:
 				if ( DIO_info->dir == INPUT )
 				{
 					PORTD_DIR &= ~(DIO_info->pins); //clear the bits to be inputs
@@ -224,7 +224,7 @@ ERROR_STATUS DIO_Write (uint8_t GPIO, uint8_t u8_pins, uint8_t u8_value){
 *Description: This function gets the value of a full port, a nibble
 * 			  or even one pin.
 */
-ERROR_STATUS DIO_Read (uint8_t GPIO,uint8_t u8_pin, uint8_t *data){
+ERROR_STATUS DIO_Read (uint8_t GPIO,uint8_t u8_pins, uint8_t *data){
 	
 	
 	ERROR_STATUS u8_status = E_OK;
@@ -238,18 +238,18 @@ ERROR_STATUS DIO_Read (uint8_t GPIO,uint8_t u8_pin, uint8_t *data){
 		switch(GPIO){
 			
 			case GPIOA:
-					*data =	 (PORTA_PIN & u8_pin ) ;
+					*data =	 (PORTA_PIN & u8_pins ) ;
 					break;
 			
 			case GPIOB:
-					*data =	 (PORTB_PIN & u8_pin ) ;
+					*data =	 (PORTB_PIN & u8_pins ) ;
 					break;
 			
 			case GPIOC:
-					*data =	 (PORTC_PIN & u8_pin ) ;
+					*data =	 (PORTC_PIN & u8_pins ) ;
 					break;
 			case GPIOD:
-					*data =	(PORTD_PIN & u8_pin ) ;
+					*data =	(PORTD_PIN & u8_pins ) ;
 					break;
 			default: 
 			   u8_status = E_NOK;

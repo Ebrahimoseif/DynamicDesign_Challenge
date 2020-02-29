@@ -5,8 +5,8 @@
  * Author : EbrahimOseif
  */ 
 
-#include "tmu.h"
-#include "DIO.h"
+#include "Services/tmu.h"
+#include "MCAL/DIO.h"
 
 
 void led0_toggle(void){
@@ -53,19 +53,16 @@ int main(void)
 	
 	TMU_Init();
 	
-	/* 	TMU_Start(funcPtr, delay_ms , periodicity) */
 	TMU_Start(led0_toggle, 1000, PERIODIC);
 	TMU_Start(led1_toggle, 500, ONE_SHOT);
 	TMU_Start(led2_toggle, 2000, PERIODIC);
 
-	/* enable global interrupts */
 	sei();
 
 	
 	while (1)
 	{
 		//fun();
-		
 		TMU_Dispatcher();
 	}
 	

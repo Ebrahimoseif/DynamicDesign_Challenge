@@ -13,7 +13,6 @@
 /************************************************************************/
 
 #define NULL		((void *)0)
-#define	ZERO		0
 #define NULL_CHAR	'\0'
 typedef unsigned char uint8_t;
 typedef unsigned int uint16_t;

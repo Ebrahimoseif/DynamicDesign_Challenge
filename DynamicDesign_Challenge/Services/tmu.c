@@ -38,20 +38,11 @@ static void TMU_ShiftTasks(uint8_t newIndex, uint8_t oldIndex);
 /*				 Global / Static Variables						       */
 /************************************************************************/
 
+static uint16_t gu16_PRELOAD = 0;
 static uint8_t gsu8_TMUInitStatus = NOT_INITIALIZED;
-
-/* the resolution of the triggering */
 static volatile uint8_t gu8_TMU_TimerOvf_Flag = OVF_NOT_TRIGGERED;
-
-/* ISR flag counter */
-static volatile uint8_t gu8_OvfCounter;
-
-/* the preload value of the timer */
-static uint16_t gu16_PRELOAD;
-
- /* index of the buffer*/
-static uint8_t gu8_Index;
-
+static volatile uint8_t gu8_OvfCounter = 0;
+static uint8_t gu8_Index = 0;
 Timer_cfg_s gstr_Timer_Cfg;
 
 /************************************************************************/
@@ -79,18 +70,18 @@ ERROR_STATUS TMU_Init(void)
 			u8_status = TMU_ERROR_BASE + ERROR_ALREADY_INITIALIZED;
 		}
 		else{
-			 /* INITIALIZE THE BUFFER */
+			
 			uint8_t u8_counter;
 			
-			for(u8_counter = ZERO; u8_counter < MAX_TASK_COUNT; u8_counter++)
+			for(u8_counter = 0; u8_counter < MAX_TASK_COUNT; u8_counter++)
 			{
 				gastrTMU_Buff[u8_counter].gptrTMU_Function = NULL;
-				gastrTMU_Buff[u8_counter].u16_Delay		   = ZERO;
-				gastrTMU_Buff[u8_counter].u8_Periodicity   = ZERO;
+				gastrTMU_Buff[u8_counter].u16_Delay = 0;
+				gastrTMU_Buff[u8_counter].u8_Periodicity = 0;
 			}
 
 
-			/* switch on timer channel AND initialize  */
+			/* switch on timer channel */
 			
 			#if TMU_TIMER_CH0
 			
@@ -153,32 +144,14 @@ ERROR_STATUS TMU_DeInit(void)
 		{
 			/* empty the buffer */
 			uint8_t u8_counter;
-			for(u8_counter = ZERO; u8_counter < MAX_TASK_COUNT; u8_counter++)
+			for(u8_counter = 0; u8_counter < MAX_TASK_COUNT; u8_counter++)
 			{
-				gastrTMU_Buff[u8_counter].gptrTMU_Function		= NULL;
-				gastrTMU_Buff[u8_counter].u16_Delay				= ZERO;
-				gastrTMU_Buff[u8_counter].u16_MilliSecond_Count = ZERO;
-				gastrTMU_Buff[u8_counter].u8_Periodicity		= ZERO;
+				gastrTMU_Buff[u8_counter].gptrTMU_Function = NULL;
+				gastrTMU_Buff[u8_counter].u16_Delay = 0;
+				gastrTMU_Buff[u8_counter].u16_MilliSecond_Count = 0;
+				gastrTMU_Buff[u8_counter].u8_Periodicity = 0;
 			}
 
-	/*Clear the Flags */
-	        gu16_PRELOAD			= ZERO;
-	        gsu8_TMUInitStatus		= NOT_INITIALIZED;
-	        gu8_TMU_TimerOvf_Flag   = OVF_NOT_TRIGGERED;
-	        gu8_OvfCounter			= ZERO;
-	        gu8_Index				= ZERO;
-			
-			/* stop the timer */
-			
-			#if  TMU_TIMER_CH0
-			Timer_Stop(TIMER_CH0);
-			
-			#elif  TMU_TIMER_CH1
-			Timer_Stop(TIMER_CH1);
-			#elif  TMU_TIMER_CH2
-			Timer_Stop(TIMER_CH2);
-			#endif
-			
 			/*  TMU module is not initialized */
 			gsu8_TMUInitStatus = NOT_INITIALIZED;
 			
@@ -204,21 +177,19 @@ ERROR_STATUS TMU_Start(gptrTMU_Function_t gptrTMU_Function,
 */
 		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
 		
-		/* check the module */
+		
 	if(gsu8_TMUInitStatus == NOT_INITIALIZED)
 	{
 		u8_status = TMU_ERROR_BASE + ERROR_NOT_INITIALIZED;
 	}
 	else
 	{
-			/* check the function pointer  */	
 		if(NULL == gptrTMU_Function)
 		{
 			u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
 		}
 		else
 		{
-				/* check the buffer is full or not */
 			if (gu8_Index == MAX_TASK_COUNT)
 			{
 				u8_status = TMU_ERROR_BASE + ERROR_FULL_BUFFER;
@@ -227,12 +198,12 @@ ERROR_STATUS TMU_Start(gptrTMU_Function_t gptrTMU_Function,
 			/* add the task to the buffer */
 			gastrTMU_Buff[gu8_Index].gptrTMU_Function		= gptrTMU_Function;
 			gastrTMU_Buff[gu8_Index].u16_Delay				= u16_Delay;
-			gastrTMU_Buff[gu8_Index].u16_MilliSecond_Count  = ZERO;
+			gastrTMU_Buff[gu8_Index].u16_MilliSecond_Count  = 0;
 			gastrTMU_Buff[gu8_Index].u8_Periodicity         = u8_Periodicity;
 
 			/*start the timer for the first time */
 			
-			if(gu8_Index == ZERO)
+			if(gu8_Index == 0)
 			{
 				#if  TMU_TIMER_CH0
 								
@@ -266,7 +237,6 @@ ERROR_STATUS TMU_Stop(gptrTMU_Function_t gptrTMU_Function)
 */
 		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
 		
-		/* check the module */
 
 	if(gsu8_TMUInitStatus == NOT_INITIALIZED)
 	{
@@ -275,24 +245,21 @@ ERROR_STATUS TMU_Stop(gptrTMU_Function_t gptrTMU_Function)
 	else
 	{
 		uint8_t u8_Counter;
-		/* check the buffer is empty or not */
 
-		if(gu8_Index == ZERO)
+		if(gu8_Index == 0)
 		{
 			u8_status = TMU_ERROR_BASE + ERROR_EMPTY_BUFFER;
 		}
 		else
 		{
-			/* check the function pointer */
-
 			if (NULL == gptrTMU_Function)
 			{
 			u8_status = TMU_ERROR_BASE + ERROR_NULL_POINTER;
 			}
 			else
 			{
-					/* loop to find the task  */
-			for(u8_Counter = ZERO; u8_Counter < MAX_TASK_COUNT; u8_Counter++)
+			
+			for(u8_Counter = 0; u8_Counter < MAX_TASK_COUNT; u8_Counter++)
 				{
 					if(gastrTMU_Buff[u8_Counter].gptrTMU_Function == gptrTMU_Function)
 					{
@@ -316,7 +283,7 @@ ERROR_STATUS TMU_Stop(gptrTMU_Function_t gptrTMU_Function)
 
 		/*  if buffer is empty so stop the timer */
 		
-		if(gu8_Index == ZERO)
+		if(gu8_Index == 0)
 		{
 			#if  TMU_TIMER_CH0
 			Timer_Stop(TIMER_CH0);
@@ -345,13 +312,12 @@ ERROR_STATUS TMU_Dispatcher(void)
 */
 		ERROR_STATUS u8_status = TMU_ERROR_BASE + NO_ERRORS;
 		
-			/* check the resolution flag */
+
 	if(gu8_TMU_TimerOvf_Flag == OVF_TRIGGERED)
 	{
 		uint8_t u8_Counter;
-					
-					/* loop the buffer of tasks */
-		for(u8_Counter = ZERO; u8_Counter < gu8_Index; u8_Counter++)
+			
+		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
 		{
 			if(NULL == gastrTMU_Buff[u8_Counter].gptrTMU_Function)
 			{
@@ -368,7 +334,7 @@ ERROR_STATUS TMU_Dispatcher(void)
 
 		/* Loop through TCB buffer and execute the tasks */
 		
-		for(u8_Counter = ZERO; u8_Counter < gu8_Index; u8_Counter++)
+		for(u8_Counter = 0; u8_Counter < gu8_Index; u8_Counter++)
 		{
 			if(NULL == gastrTMU_Buff[u8_Counter].gptrTMU_Function)
 			{
@@ -382,12 +348,10 @@ ERROR_STATUS TMU_Dispatcher(void)
 				
 			if(gastrTMU_Buff[u8_Counter].u16_MilliSecond_Count >= gastrTMU_Buff[u8_Counter].u16_Delay)
 				{
-					gastrTMU_Buff[u8_Counter].u16_MilliSecond_Count = ZERO;
+					gastrTMU_Buff[u8_Counter].u16_MilliSecond_Count = 0;
 
 					gastrTMU_Buff[u8_Counter].gptrTMU_Function();
 								
-					/* release it if one shot */
-
 					if(gastrTMU_Buff[u8_Counter].u8_Periodicity == ONE_SHOT)
 					{
 						TMU_Stop(gastrTMU_Buff[u8_Counter].gptrTMU_Function);
@@ -412,7 +376,7 @@ static void TMU_TimerOvf_CBK(void)
 	{
 		gu8_TMU_TimerOvf_Flag = OVF_TRIGGERED;
 
-		gu8_OvfCounter = ZERO;
+		gu8_OvfCounter = 0;
 	}
 		
 	/* Restart and pre-load timer */
@@ -430,9 +394,9 @@ static void TMU_TimerOvf_CBK(void)
 static void TMU_ClearTask(uint8_t u8_index){
 	
 	  gastrTMU_Buff[gu8_Index].gptrTMU_Function			= NULL;
-	  gastrTMU_Buff[gu8_Index].u16_Delay				= ZERO;
-	  gastrTMU_Buff[gu8_Index].u16_MilliSecond_Count    = ZERO;
-	  gastrTMU_Buff[gu8_Index].u8_Periodicity			= ZERO;
+	  gastrTMU_Buff[gu8_Index].u16_Delay				= 0;
+	  gastrTMU_Buff[gu8_Index].u16_MilliSecond_Count    = 0;
+	  gastrTMU_Buff[gu8_Index].u8_Periodicity			= 0;
 }
 
 static void TMU_ShiftTasks(uint8_t newIndex, uint8_t oldIndex){

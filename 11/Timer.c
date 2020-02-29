@@ -29,13 +29,12 @@ uint8_t gu8_Timer2initFlag = NOT_INITIALIZED;
 
 
 /* the initialized struct*/
-/*
 struct Timer_cfg_s st_Timer_cfg={
 	TIMER_CH0,
 	TIMER_MODE,
 	TIMER_INTERRUPT_MODE,
 	TIMER_PRESCALER_1024
-}; */
+};
 
 
 static void (*Timer_OVF_CBK_Ptr[3])(void) = {NULL};
