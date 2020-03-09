@@ -10,6 +10,16 @@
 #define SLEEP_H_
 
 
+/************************************************************************/
+/*				 INCLUDES			        */
+/************************************************************************/
+
+
+/************************************************************************/
+/*				 DEFINES			        */
+/************************************************************************/
+
+
 #define		IDLE_MODE						0 
 #define		ADC_NOISE_REDUC_MODE			1 
 #define		POWER_DOWN_MODE					2 
@@ -29,20 +39,41 @@
 #define     ENABLE_SLEEP_MASK				0x80
 
 
+/************************************************************************/
+/*						 FUNCTIONS' PROTOTYPES   				        */
+/************************************************************************/
+
+
 
 
 /**
-* @brief: CPU_Sleep provides six modes
+* @brief: Sleep_SetMode provides six modes
 * 	  IDLE, ADC_NOISE_REDUC, POWER_DOWN, POWER_SAVE, STANDBY, EXT_STANDBY
 * @param: sleep_mode defines sleep modes
 * Input : uint8_t
 * Output: None
 * @return: void
 */
-void set_sleep_mode(uint8_t sleep_mode);
+void Sleep_SetMode(uint8_t sleep_mode);
 
-void Sleep_enable(void);
+/**
+* @brief: Sleep_enable enable sleep mode
+*				set the enable bit 
+* @param: void
+* Input : void
+* Output: None
+* @return: void
+*/
+void Sleep_Enable(void);
 
-void Sleep_disable(void);
+/**
+* @brief: Sleep_disable enable sleep mode
+*				clear the enable bit
+* @param: void 
+* Input : void
+* Output: None
+* @return: void
+*/
+void Sleep_Disable(void);
 
 #endif /* SLEEP_H_ */

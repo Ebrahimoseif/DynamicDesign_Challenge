@@ -6,11 +6,28 @@
  */ 
 
 
+/************************************************************************/
+/*				 INCLUDES			        */
+/************************************************************************/
+
 #include "registers.h"
 #include "sleep.h"
 
 
-void set_sleep_mode(uint8_t sleep_mode)
+/************************************************************************/
+/*						 FUNCTIONS' implementation				        */
+/************************************************************************/
+
+
+/**
+* @brief: Sleep_SetMode provides six modes
+* 	  IDLE, ADC_NOISE_REDUC, POWER_DOWN, POWER_SAVE, STANDBY, EXT_STANDBY
+* @param: sleep_mode defines sleep modes
+* Input : uint8_t
+* Output: None
+* @return: void
+*/
+void Sleep_SetMode(uint8_t sleep_mode)
 {
 	
 	/* 	  Note: STANDBY and EXT_STANDBY sleep modes are only available with
@@ -54,17 +71,34 @@ void set_sleep_mode(uint8_t sleep_mode)
   
 }
 
-void Sleep_enable(void){
+/**
+* @brief: Sleep_enable enable sleep mode
+*				set the enable bit
+* @param: void
+* Input : void
+* Output: None
+* @return: void
+*/
+void Sleep_Enable(void){
 	
 	/* set SE BIT */
+	/*
 	PORTA_DIR = 0XFF;
-	PORTA_DATA ^= 0XFF;
+	PORTA_DATA ^= 0XFF;*/
 	
 	MCUCR |=  ENABLE_SLEEP_MASK;
 	 asm("SLEEP");	
 }
 
-void Sleep_disable(void){
+/**
+* @brief: Sleep_disable enable sleep mode
+*				clear the enable bit
+* @param: void
+* Input : void
+* Output: None
+* @return: void
+*/
+void Sleep_Disable(void){
 	
 	/* CLEAR SE BIT */
 	MCUCR &= ~ ENABLE_SLEEP_MASK;

@@ -229,7 +229,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x890
+.text           0x00000000      0x886
  *(.vectors)
  .vectors       0x00000000       0x54 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/Atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32/avr5/crtatmega32.o
                 0x00000000                __vector_default
@@ -321,48 +321,48 @@ END GROUP
                 0x0000018c                led0_toggle
  .text.main     0x00000196       0x44 main.o
                 0x00000196                main
- .text.set_sleep_mode
+ .text.Sleep_SetMode
                 0x000001da       0x4c sleep.o
-                0x000001da                set_sleep_mode
- .text.Sleep_enable
-                0x00000226       0x14 sleep.o
-                0x00000226                Sleep_enable
- .text.Sleep_disable
-                0x0000023a        0x8 sleep.o
-                0x0000023a                Sleep_disable
+                0x000001da                Sleep_SetMode
+ .text.Sleep_Enable
+                0x00000226        0xa sleep.o
+                0x00000226                Sleep_Enable
+ .text.Sleep_Disable
+                0x00000230        0x8 sleep.o
+                0x00000230                Sleep_Disable
  .text.Timer_Init
-                0x00000242      0x128 Timer.o
-                0x00000242                Timer_Init
+                0x00000238      0x128 Timer.o
+                0x00000238                Timer_Init
  .text.Timer_Start
-                0x0000036a      0x16c Timer.o
-                0x0000036a                Timer_Start
+                0x00000360      0x16c Timer.o
+                0x00000360                Timer_Start
  .text.Timer_Stop
-                0x000004d6       0x6a Timer.o
-                0x000004d6                Timer_Stop
+                0x000004cc       0x6a Timer.o
+                0x000004cc                Timer_Stop
  .text.__vector_11
-                0x00000540       0x4e Timer.o
-                0x00000540                __vector_11
+                0x00000536       0x4e Timer.o
+                0x00000536                __vector_11
  .text.TMU_TimerOvf_CBK
-                0x0000058e       0x30 tmu.o
+                0x00000584       0x30 tmu.o
  .text.TMU_Init
-                0x000005be       0x5a tmu.o
-                0x000005be                TMU_Init
+                0x000005b4       0x5a tmu.o
+                0x000005b4                TMU_Init
  .text.TMU_Start
-                0x00000618       0x5c tmu.o
-                0x00000618                TMU_Start
+                0x0000060e       0x5c tmu.o
+                0x0000060e                TMU_Start
  .text.TMU_Stop
-                0x00000674       0xf6 tmu.o
-                0x00000674                TMU_Stop
+                0x0000066a       0xf6 tmu.o
+                0x0000066a                TMU_Stop
  .text.TMU_Dispatcher
-                0x0000076a      0x116 tmu.o
-                0x0000076a                TMU_Dispatcher
- .text.libgcc   0x00000880        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_tablejump2.o)
-                0x00000880                __tablejump2__
-                0x0000088c                . = ALIGN (0x2)
+                0x00000760      0x116 tmu.o
+                0x00000760                TMU_Dispatcher
+ .text.libgcc   0x00000876        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_tablejump2.o)
+                0x00000876                __tablejump2__
+                0x00000882                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000088c        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x0000088c                _exit
-                0x0000088c                exit
+ .fini9         0x00000882        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00000882                _exit
+                0x00000882                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -381,11 +381,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000088c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000882        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000890                _etext = .
+                0x00000886                _etext = .
 
-.data           0x00800060        0x0 load address 0x00000890
+.data           0x00800060        0x0 load address 0x00000886
                 [!provide]                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -430,8 +430,8 @@ END GROUP
  COMMON         0x008000b6        0x6 tmu.o
                 0x008000b6                gstr_Timer_Cfg
                 0x008000bc                PROVIDE (__bss_end, .)
-                0x00000890                __data_load_start = LOADADDR (.data)
-                0x00000890                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000886                __data_load_start = LOADADDR (.data)
+                0x00000886                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x008000bc        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -540,14 +540,14 @@ END GROUP
  .debug_abbrev  0x00000754      0x151 Timer.o
  .debug_abbrev  0x000008a5      0x238 tmu.o
 
-.debug_line     0x00000000      0xe38
+.debug_line     0x00000000      0xe2d
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x115 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/Atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_line    0x00000115      0x2a3 DIO.o
  .debug_line    0x000003b8       0xdf main.o
- .debug_line    0x00000497       0xd0 sleep.o
- .debug_line    0x00000567      0x57b Timer.o
- .debug_line    0x00000ae2      0x356 tmu.o
+ .debug_line    0x00000497       0xc5 sleep.o
+ .debug_line    0x0000055c      0x57b Timer.o
+ .debug_line    0x00000ad7      0x356 tmu.o
 
 .debug_frame    0x00000000      0x278
  *(.debug_frame)
@@ -557,18 +557,18 @@ END GROUP
  .debug_frame   0x000000fc       0xbc Timer.o
  .debug_frame   0x000001b8       0xc0 tmu.o
 
-.debug_str      0x00000000      0x685
+.debug_str      0x00000000      0x68f
  *(.debug_str)
  .debug_str     0x00000000      0x196 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/Atmel/ATmega_DFP/1.3.300/gcc/dev/atmega32/avr5/crtatmega32.o
  .debug_str     0x00000196      0x1ca DIO.o
                                 0x203 (size before relaxing)
- .debug_str     0x00000360      0x104 main.o
-                                0x2a0 (size before relaxing)
- .debug_str     0x00000464       0x1b sleep.o
-                                0x1c2 (size before relaxing)
- .debug_str     0x0000047f      0x12a Timer.o
+ .debug_str     0x00000360      0x103 main.o
+                                0x29f (size before relaxing)
+ .debug_str     0x00000463       0x26 sleep.o
+                                0x1c1 (size before relaxing)
+ .debug_str     0x00000489      0x12a Timer.o
                                 0x2d3 (size before relaxing)
- .debug_str     0x000005a9       0xdc tmu.o
+ .debug_str     0x000005b3       0xdc tmu.o
                                 0x3a1 (size before relaxing)
 
 .debug_loc      0x00000000      0xea6

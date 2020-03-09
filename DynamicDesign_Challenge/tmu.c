@@ -428,7 +428,7 @@ static void TMU_TimerOvf_CBK(void)
 	
 	
 	/*sleep disable to clear SE */
-	Sleep_disable();
+	Sleep_Disable();
 }
 
 static void TMU_ClearTask(uint8_t u8_index){

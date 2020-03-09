@@ -61,7 +61,7 @@ int main(void)
 	/*TMU_Start(led1_toggle, 500, ONE_SHOT);
 	TMU_Start(led2_toggle, 2000, PERIODIC);*/
 	
-	set_sleep_mode(IDLE_MODE);
+	Sleep_SetMode(IDLE_MODE);
 
 	/* enable global interrupts */
 	sei();
@@ -73,7 +73,7 @@ int main(void)
 		
 		TMU_Dispatcher();
 		
-		Sleep_enable();
+		Sleep_Enable();
 	}
 	
 	
