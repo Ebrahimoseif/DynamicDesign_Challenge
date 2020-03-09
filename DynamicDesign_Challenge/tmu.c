@@ -425,6 +425,10 @@ static void TMU_TimerOvf_CBK(void)
 	#elif  TMU_TIMER_CH2
 	Timer_Start(TIMER_CH2, 6);
 	#endif
+	
+	
+	/*sleep disable to clear SE */
+	Sleep_disable();
 }
 
 static void TMU_ClearTask(uint8_t u8_index){

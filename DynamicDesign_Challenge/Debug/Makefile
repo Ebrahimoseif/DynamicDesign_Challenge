@@ -39,6 +39,7 @@ SUBDIRS :=
 C_SRCS +=  \
 ../DIO.c \
 ../main.c \
+../sleep.c \
 ../Timer.c \
 ../tmu.c \
 ../tmu_cfg.c
@@ -53,6 +54,7 @@ ASM_SRCS +=
 OBJS +=  \
 DIO.o \
 main.o \
+sleep.o \
 Timer.o \
 tmu.o \
 tmu_cfg.o
@@ -60,6 +62,7 @@ tmu_cfg.o
 OBJS_AS_ARGS +=  \
 DIO.o \
 main.o \
+sleep.o \
 Timer.o \
 tmu.o \
 tmu_cfg.o
@@ -67,6 +70,7 @@ tmu_cfg.o
 C_DEPS +=  \
 DIO.d \
 main.d \
+sleep.d \
 Timer.d \
 tmu.d \
 tmu_cfg.d
@@ -74,6 +78,7 @@ tmu_cfg.d
 C_DEPS_AS_ARGS +=  \
 DIO.d \
 main.d \
+sleep.d \
 Timer.d \
 tmu.d \
 tmu_cfg.d
@@ -100,6 +105,13 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./main.o: .././main.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\1.3.300\include" -I"../MCAL" -I"../Services" -I"../Util"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\1.3.300\gcc\dev\atmega32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./sleep.o: .././sleep.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\1.3.300\include" -I"../MCAL" -I"../Services" -I"../Util"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega32 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\Atmel\ATmega_DFP\1.3.300\gcc\dev\atmega32" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
